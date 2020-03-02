@@ -4,7 +4,7 @@ type firebaseConfig;
 module Auth = BsFirebase__Auth;
 module Firestore = BsFirebase__Firestore;
 
-[@bs.module] external firebase: firebase = "firebase";
+[@bs.module] external firebase: firebase = "firebase/app";
 
 [@bs.send]
 external initializeApp: (firebase, firebaseConfig) => unit = "initializeApp";
