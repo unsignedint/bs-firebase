@@ -26,7 +26,7 @@ module Collection = {
     [@bs.send] external get: (t, unit) => Js.Promise.t(DocRef.t) = "get";
     [@bs.send] external delete: (t, unit) => Js.Promise.t(unit) = "delete";
     [@bs.send]
-    external set: (t, 'a, ~options: setOptions=?) => Js.Promise.t(unit) =
+    external set: (t, 'a, ~options: setOptions=?, unit) => Js.Promise.t(unit) =
       "set";
   };
 
