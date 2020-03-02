@@ -1,6 +1,6 @@
 type t;
 
-module DocRef = {
+module DocSnapshot = {
   type t;
 
   [@bs.get] external exists: t => bool = "exists";
@@ -11,19 +11,19 @@ module DocRef = {
 module QuerySnapshot = {
   type t;
 
-  [@bs.get] external docs: t => array(DocRef.t) = "docs";
+  [@bs.get] external docs: t => array(DocSnapshot.t) = "docs";
 };
 
 module Collection = {
   type t;
 
-  module Doc = {
+  module DocRef = {
     type t;
 
     [@bs.deriving abstract]
     type setOptions = {merge: bool};
 
-    [@bs.send] external get: (t, unit) => Js.Promise.t(DocRef.t) = "get";
+    [@bs.send] external get: (t, unit) => Js.Promise.t(DocSnapshot.t) = "get";
     [@bs.send] external delete: (t, unit) => Js.Promise.t(unit) = "delete";
     [@bs.send]
     external set: (t, 'a, ~options: setOptions=?, unit) => Js.Promise.t(unit) =
@@ -32,7 +32,7 @@ module Collection = {
 
   [@bs.send] external add: (t, 'a) => Js.Promise.t(DocRef.t) = "add";
   [@bs.send] external get: (t, unit) => Js.Promise.t(QuerySnapshot.t) = "get";
-  [@bs.send] external doc: (t, string) => Doc.t = "doc";
+  [@bs.send] external doc: (t, string) => DocRef.t = "doc";
   [@bs.send]
   external where:
     (
