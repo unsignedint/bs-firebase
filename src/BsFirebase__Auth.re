@@ -1,5 +1,7 @@
 type t;
 
+[@bs.module] external require: t = "firebase/auth";
+
 module User = {
   type t;
 
