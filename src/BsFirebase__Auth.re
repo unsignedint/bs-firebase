@@ -66,6 +66,9 @@ module Provider = {
 };
 
 [@bs.send]
+external signInAnonymously: t => Js.Promise.t(Result.t) = "signInAnonymously";
+
+[@bs.send]
 external signInWithEmailAndPassword:
   (t, ~email: string, ~password: string) => Js.Promise.t(Result.t) =
   "signInWithEmailAndPassword";
@@ -79,3 +82,5 @@ external onAuthStateChanged: (t, Js.Nullable.t(User.t) => unit) => unit =
   "onAuthStateChanged";
 
 [@bs.send] external signOut: (t, unit) => unit = "signOut";
+
+[@bs.get] external currentUser: t => User.t = "currentUser";
