@@ -12,6 +12,7 @@ module QuerySnapshot = {
   type t;
 
   [@bs.get] external docs: t => array(DocSnapshot.t) = "docs";
+  [@bs.get] external size: t => int = "size";
 };
 
 module Collection = {
