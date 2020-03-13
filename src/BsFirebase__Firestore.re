@@ -56,3 +56,16 @@ module Collection = {
 [@bs.module] external require: t = "firebase/firestore";
 
 [@bs.send] external collection: (t, string) => Collection.t = "collection";
+
+module Transaction = {
+  type firestore = t;
+  type t;
+
+  type updateFunction('a) = t => Js.Promise.t('a);
+
+  [@bs.send] external get: (t, Collection.DocRef.t) => Js.Promise.t(DocSnapshot.t) = "get";
+  [@bs.send] external update: (t, Collection.DocRef.t, 'a) => t = "update";
+}
+
+
+[@bs.send] external runTransaction: (t, Transaction.updateFunction('a)) => Js.Promise.t('a) = "runTransaction";
