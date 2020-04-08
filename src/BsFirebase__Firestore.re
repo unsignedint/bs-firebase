@@ -65,6 +65,8 @@ module Transaction = {
 
   [@bs.send] external get: (t, Collection.DocRef.t) => Js.Promise.t(DocSnapshot.t) = "get";
   [@bs.send] external update: (t, Collection.DocRef.t, 'a) => t = "update";
+  [@bs.send] external set: (t, Collection.DocRef.t, 'a, ~options: Collection.DocRef.setOptions=?, unit) => t = "set";
+  [@bs.send] external delete: (t, Collection.DocRef.t) => t = "delete";
 }
 
 
