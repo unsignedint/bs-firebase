@@ -75,6 +75,22 @@ external signInWithEmailAndPassword:
   (t, ~email: string, ~password: string) => Js.Promise.t(Result.t) =
   "signInWithEmailAndPassword";
 
+type actionCodeSettings = {url: string};
+[@bs.send]
+external sendPasswordResetEmail:
+  (
+    t,
+    ~email: string,
+    ~actionCodeSettings: Js.Nullable.t(actionCodeSettings)
+  ) =>
+  Js.Promise.t(unit) =
+  "sendPasswordResetEmail";
+
+[@bs.send]
+external confirmPasswordReset:
+  (t, ~code: string, ~newPassword: string) => Js.Promise.t(unit) =
+  "confirmPasswordReset";
+
 [@bs.send]
 external signInWithPopup: (t, Provider.t) => Js.Promise.t(Result.t) =
   "signInWithPopup";
