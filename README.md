@@ -20,6 +20,8 @@ Add it to `bsconfig.json`
 ## Initialize app
 
 ```reason
+open BsFirebase;
+
 [@bs.module]
 external firebaseConfig: firebaseConfig = "./config/firebase-config.json";
 
@@ -28,11 +30,15 @@ firebase->initializeApp(firebaseConfig);
 
 ## Authentication
 
-```reason
-open BsFirebase;
+First include the 'firebase/auth' module in our app bundle.
 
+    BsFirebase.Auth.(require);
+
+#### Watch for user change
+
+```reason
 firebase
-->auth()
+->auth
 ->Auth.onAuthStateChanged(user => {
   switch (user->Js.Nullable.toOption) {
   | None => ()
@@ -45,9 +51,35 @@ firebase
   }
 });
 
-let signInWithGoogle = () => firebase->auth()->Auth.signInWithPopup(Auth.Provider.google());
-let signInWithEmailAndPassword = (~email, ~password) => firebase->auth()->Auth.signInWithEmailAndPassword(~email, ~password);
-let signOut = () => firebase->auth()->Auth.signOut();
+let signInWithGoogle = () => firebase->auth->Auth.signInWithPopup(Auth.Provider.google());
+let signInWithEmailAndPassword = (~email, ~password) => firebase->auth->Auth.signInWithEmailAndPassword(~email, ~password);
+let signOut = () => firebase->auth->Auth.signOut();
+```
+
+#### Sign in etc
+
+```reason
+Js.Promise.(
+  BsFirebase.(firebase->auth->Auth.signInWithEmailAndPassword(~email, ~password))
+  |> then_(value => {
+       Js.log(value);
+       Js.Promise.resolve(value);
+    })
+  |> ignore
+);
+```
+
+#### Get token
+
+```reason
+Js.Promise.(
+  firebase->auth->Auth.currentUser->Auth.User.getIdToken()
+  |> then_(value => {
+       Js.log(value);
+       Js.Promise.resolve(value);
+     })
+  |> ignore
+);
 ```
 
 ## Firestore
@@ -57,7 +89,7 @@ let signOut = () => firebase->auth()->Auth.signOut();
 ```reason
 let fetchAll = () => {
   firebase
-    ->firestore()
+    ->firestore
     ->Firestore.collection("mycollection")
     ->Firestore.Collection.get()
     |> Js.Promise.then_(querySnapshot =>
@@ -80,7 +112,7 @@ let fetchAll = () => {
 ```reason
 let fetchItem = (id) => {
   firebase
-  ->firestore()
+  ->firestore
   ->Firestore.collection("mycollection")
   ->Firestore.Collection.doc(id)
   ->Firestore.Collection.Doc.get()
@@ -98,7 +130,7 @@ let fetchItem = (id) => {
 ```reason
 let create = (title, description) =>
   firebase
-  ->firestore()
+  ->firestore
   ->Firestore.collection("collection")
   ->Firestore.Collection.add({
     "title": title,
@@ -111,10 +143,10 @@ let create = (title, description) =>
 ```reason
 let update = (id, title) =>
   firebase
-  ->firestore()
+  ->firestore
   ->Firestore.collection("collection")
   ->Firestore.Collection.doc(id)
-  ->Firestore.Collection.Doc.set({
+  ->Firestore.Collection.DocRef.set({
     "title": title
   });
 ```
@@ -124,8 +156,8 @@ let update = (id, title) =>
 ```reason
 let remove = (id: string) =>
   firebase
-  ->firestore()
+  ->firestore
   ->Firestore.collection("mycollection")
   ->Firestore.Collection.doc(id)
-  ->Firestore.Collection.Doc.delete();
+  ->Firestore.Collection.DocRef.delete();
 ```
