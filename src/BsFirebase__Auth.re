@@ -13,6 +13,9 @@ module User = {
   [@bs.get] external refreshToken: t => string = "refreshToken";
   [@bs.get] external uid: t => string = "uid";
   [@bs.get] external phoneNumber: t => Js.Nullable.t(string) = "phoneNumber";
+
+  [@bs.send]
+  external getIdToken: (t, unit) => Js.Promise.t(string) = "getIdToken";
 };
 
 module Result = {
