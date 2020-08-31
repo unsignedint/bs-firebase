@@ -115,9 +115,9 @@ let fetchItem = (id) => {
   ->firestore
   ->Firestore.collection("mycollection")
   ->Firestore.Collection.doc(id)
-  ->Firestore.Collection.Doc.get()
+  ->Firestore.Collection.DocRef.get()
   |> Js.Promise.then_(doc => {
-       let data = doc->Firestore.DocRef.data();
+       let data = doc->Firestore.DocSnapshot.data();
        Js.log(data);
 
        data;
@@ -146,9 +146,11 @@ let update = (id, title) =>
   ->firestore
   ->Firestore.collection("collection")
   ->Firestore.Collection.doc(id)
-  ->Firestore.Collection.DocRef.set({
-    "title": title
-  });
+  ->Firestore.Collection.DocRef.set(
+      {"title": title},
+      ~options=Firestore.Collection.DocRef.setOptions(~merge=true),
+      (),
+    );
 ```
 
 #### Remove
